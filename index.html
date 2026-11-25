@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Management - Suraj Singh</title>
+<style>
+  body { font-family: Arial; background: #4e54c8; color: white; text-align: center; }
+  .box { background: white; color: black; width: 360px; margin: 20px auto; padding: 20px; border-radius: 15px; }
+  input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+  button { padding: 10px 15px; margin: 5px 2px; border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 15px; }
+  .add { background: #2ecc71; width: 100%; }
+  .del { background: red; }
+  .stu { background: #f9f9f9; border: 1px solid #ddd; padding: 10px; margin: 8px 0; border-radius: 10px; text-align: left; }
+  #msg { color: green; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>🎓 Student Management</h2>
+  <p>Suraj Singh - Project 4</p>
+  <input type="text" id="sname" placeholder="Student Name">
+  <input type="number" id="roll" placeholder="Roll Number">
+  <input type="text" id="cls" placeholder="Class - jaise BCA 1st Year">
+  <input type="number" id="marks" placeholder="Marks / 100">
+  <button class="add" onclick="addStudent()">Add Student</button>
+  <input type="text" id="search" placeholder="Search by Name..." onkeyup="searchStu()">
+  <p id="msg"></p>
+  <h3>Student List - Total: <span id="count">0</span></h3>
+  <div id="list"></div>
+</div>
+<script>
+  var students = [];
+  function show(data) {
+    var arr = data || students;
+    var html = "";
+    arr.forEach(function(s, i) {
+      html += '<div class="stu"><b>' + s.name + '</b> - Roll: ' + s.roll + '<br>Class: ' + s.cls + ' | Marks: ' + s.marks + '/100 | Grade: ' + getGrade(s.marks) + '<br><button class="del" onclick="delStu(' + students.indexOf(s) + ')">Delete</button></div>';
+    });
+    document.getElementById("list").innerHTML = html || "Koi student nahi hai";
+    document.getElementById("count").textContent = students.length;
+  }
+  function getGrade(m) {
+    if (m >= 90) return "A+";
+    if (m >= 75) return "A";
+    if (m >= 60) return "B";
+    if (m >= 40) return "C";
+    return "Fail";
+  }
+  function addStudent() {
+    var n = document.getElementById("sname").value;
+    var r = document.getElementById("roll").value;
+    var c = document.getElementById("cls").value;
+    var m = document.getElementById("marks").value;
+    if (!n || !r || !c || !m) { document.getElementById("msg").textContent = "Sab kuch bharo!"; return; }
+    students.push({ name: n, roll: r, cls: c, marks: Number(m) });
+    document.getElementById("msg").textContent = "Student Add Ho Gaya! ✅";
+    document.getElementById("sname").value = ""; document.getElementById("roll").value = ""; document.getElementById("cls").value = ""; document.getElementById("marks").value = "";
+    show();
+  }
+  function delStu(i) { students.splice(i, 1); show(); }
+  function searchStu() {
+    var q = document.getElementById("search").value.toLowerCase();
+    var filtered = students.filter(function(s) { return s.name.toLowerCase().includes(q); });
+    show(filtered);
+  }
+  show();
+</script>
+</body>
+</html>
